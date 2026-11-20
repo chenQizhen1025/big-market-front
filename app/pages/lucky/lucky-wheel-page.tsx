@@ -10,17 +10,15 @@ import {RaffleAwardVO} from "@/types/RaffleAwardVO";
 export function LuckyWheelPage() {
     // 注意：客户端组件也会在服务端预渲染，不能直接访问 window。
     // 用 useState 惰性初始化：服务端得到 0，浏览器首帧读取真实 query 参数。
-    const [strategyId] = useState(() =>
-        typeof window === 'undefined'
-            ? 0
-            : Number(new URLSearchParams(window.location.search).get('strategyId'))
-    )
+    const queryParams = new URLSearchParams(window.location.search);
+    const strategyId = Number(queryParams.get('strategyId'));
     const [prizes, setPrizes] = useState([{}])
-    const myLucky = useRef<any>(null)
+    const myLucky = useRef()
 
     const [blocks] = useState([
         {padding: '10px', background: '#869cfa', imgs: [{src: "https://bugstack.cn/images/system/blog-03.png"}]}
     ])
+
 
     const [buttons] = useState([
         {radius: '40%', background: '#617df2'},
@@ -92,6 +90,7 @@ export function LuckyWheelPage() {
                             myLucky.current.stop(prizeIndex);
                         }
                     );
+
                 }, 2500)
             }}
             onEnd={
